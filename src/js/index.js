@@ -9,12 +9,12 @@ import Scene from '@/js/components/scene'
     GUI: true,
 
     uniforms: {
-      uSpeed: 0.3,
+      uSpeed: 0.1,
       uFadeCenterX: 0.5,
-      uFadeCenterY: 0.5,
+      uFadeCenterY: 0.521,
       uFadeFrom: 0.075,
-      uFadeTo: 0.75,
-      uDisplacementCoef: 0.5,
+      uFadeTo: 0.127,
+      uDisplacementCoef: 0.017,
       uOffsetX: 0,
       uOffsetY: 0,
     },
