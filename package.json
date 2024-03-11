@@ -14,7 +14,7 @@
     "build": "vite build --emptyOutDir",
     "preview": "vite preview",
     "deploy": "vite build --emptyOutDir && gh-pages -d dist",
-    "startrbln": "HOST=0.0.0.0 PORT=3028 vite preview"
+    "startrbln": "vite preview --port 3028"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
