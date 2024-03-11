@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "builda": "vite build --emptyOutDir",
+    "build": "vite build --emptyOutDir",
     "preview": "vite preview",
     "deploy": "vite build --emptyOutDir && gh-pages -d dist",
     "startrbln": "vite preview --port 3028"
