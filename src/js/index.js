@@ -23,7 +23,7 @@ import Scene from '@/js/components/scene'
 
   new Scene({
     el: '.scene__2',
-    image: './img/face3.png',
+    image: './img/face4.jpg',
     displacement: './img/map10.png',
     GUI: true,
   })
@@ -37,15 +37,15 @@ import Scene from '@/js/components/scene'
 
   new Scene({
     el: '.scene__4',
-    image: './img/face3.png',
-    displacement: './img/map4.png',
+    image: './img/face4.jpg',
+    displacement: './img/map18.png',
     GUI: true,
   })
 
   new Scene({
     el: '.scene__5',
     image: './img/face3.png',
-    displacement: './img/map22.png',
+    displacement: './img/map20.png',
     GUI: true,
   })
 })()
