@@ -56,7 +56,7 @@ export default class CustomScene extends React.Component {
       el: '.scene__1',
       image: './path/to/your/image.png', // Adjust the path to your image
       displacement: './path/to/your/displacement/image.png', // Adjust the path to your displacement image
-      GUI: true,
+      GUI: false,
     })
   }
 
