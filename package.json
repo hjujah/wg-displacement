@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "wg-displacement",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Webgl image displacement",
   "author": "Filip Arneric <filip@synchronized.studio>",
   "license": "MIT",
@@ -43,7 +43,7 @@
     "ogl": "^0.0.101",
     "wg-displacement": "^0.0.1"
   },
-  "main": "index.js",
+  "main": "./dist/assets/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hjujah/wg-displacement.git"
