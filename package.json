@@ -5,13 +5,12 @@
   "description": "Webgl image displacement",
   "author": "Filip Arneric <filip@synchronized.studio>",
   "license": "MIT",
-  "type": "module",
   "keywords": [
     "shader"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build --emptyOutDir",
+    "builda": "vite build --emptyOutDir",
     "preview": "vite preview",
     "deploy": "vite build --emptyOutDir && gh-pages -d dist",
     "startrbln": "vite preview --port 3028"
