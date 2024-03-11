@@ -2,7 +2,7 @@
   "private": false,
   "name": "wg-displacement",
   "version": "0.0.5",
-  "description": "2D Webgl effect using OGL",
+  "description": "Webgl image displacement",
   "author": "Filip Arneric <filip@synchronized.studio>",
   "license": "MIT",
   "type": "module",

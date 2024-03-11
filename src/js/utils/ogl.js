@@ -4,8 +4,6 @@ export function getCoverUV(gl, image) {
   // crop image like a "background: cover"
   const aspectOfScene = gl.canvas.offsetWidth / gl.canvas.offsetHeight
 
-  console.log('image:', image)
-
   if (!image) {
     console.warn('no image provided')
     return

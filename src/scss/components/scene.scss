@@ -3,19 +3,26 @@ main {
   justify-content: center;
   align-items: center;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .lil-gui {
   position: absolute;
-  top: 0;
+  top: 100%;
   left: 0;
 }
 
 .scene {
   height: 100%;
-  width: 30%;
+  width: calc(20% - 40px);
   position: relative;
   margin: 20px;
 
   aspect-ratio: 7/9;
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }

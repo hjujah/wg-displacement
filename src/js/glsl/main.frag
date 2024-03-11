@@ -21,6 +21,11 @@ uniform float uDisplacementCoef;
 uniform float uSpeed;
 
 
+// uniform float uDisplacementX;
+// uniform float uDisplacementY;
+
+
+
 void main() {  
     // Calculate rotation without changing the pivot
     float angle = uTime * uSpeed;
@@ -34,8 +39,14 @@ void main() {
     rotatedCoord.y = sinAngle * centeredCoord.x + cosAngle * centeredCoord.y;
     rotatedCoord += 0.5; // Rotate around the original center
 
-    // Use rotatedCoord for sampling displacement texture
+
+    // Apply the movement to the rotated coordinates
+    // vec2 movedCoord = rotatedCoord + vec2(uOffsetX * 0.01, uOffsetY * 0.01);
+    
+    // Use movedCoord for sampling the displacement texture instead of rotatedCoord
     vec4 displacementTexture = texture2D(uDisplacementTexture, rotatedCoord);
+
+
 
     // Calculate fade effect based on a different center (uFadeCenterX, uFadeCenterY)
     vec2 fadeEffectCenter = vec2(uFadeCenterX, uFadeCenterY);
@@ -47,6 +58,9 @@ void main() {
     float displaceForceY = displacementTexture.r * uOffsetY * uDisplacementCoef * edgeFade;
 
     vec2 uvDisplaced = vec2(vUvMap.x - displaceForceX, vUvMap.y + displaceForceY);
+
+    // vec2 movedCoord = uvDisplaced + vec2(uOffsetX * 0.01, uOffsetY * 0.01);
+
     vec4 displacedTexture = texture2D(uTexture, uvDisplaced);
 
     gl_FragColor = displacedTexture;

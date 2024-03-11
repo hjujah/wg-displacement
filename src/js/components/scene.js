@@ -67,12 +67,13 @@ class Scene {
     y: 0,
   }
 
-  constructor(opts = { el: '.scene', GUI: false }) {
+  constructor(opts = { el: '.scene', GUI: false, uniforms: {} }) {
     this.el = document.querySelector(opts.el)
     this.uid = Math.random().toString(36).substr(2, 9)
     this.imageUrl = opts.image
     this.displacementUrl = opts.displacement
     this.GUI = opts.GUI
+    this.uniformOptions = opts.uniforms || {}
 
     this.setGUI()
     this.setScene()
@@ -102,8 +103,15 @@ class Scene {
        * @param {function} gui.add - the function used to add the control
        * @param {function} gui.onChange - the function called when the control is changed
        */
+
+      const uniform = `u${key.charAt(0).toUpperCase() + key.slice(1)}`
+
+      if (this.uniformOptions[uniform]) {
+        this.guiObj[key] = this.uniformOptions[uniform]
+      }
+
       gui.add(this.guiObj, key, control.min, control.max).onChange((val) => {
-        this.program.uniforms[`u${key.charAt(0).toUpperCase() + key.slice(1)}`].value = val
+        this.program.uniforms[uniform].value = val
       })
     }
   }
@@ -150,7 +158,7 @@ class Scene {
       ],
       gl
     ).then(() => {
-      console.log('assets loaded:', LoaderManager.assets)
+      // console.log('assets loaded:', LoaderManager.assets)
     })
 
     const uvCover = getCoverUV(gl, LoaderManager.assets[imageID].image)
@@ -166,35 +174,35 @@ class Scene {
          * @param {WebGLRenderingContext} gl - the webgl context
          */
         uTime: {
-          value: 0,
+          value: this.uniformOptions.uTime || 0,
         },
         uSpeed: {
-          value: 0.3,
+          value: this.uniformOptions.uSpeed || 0.3,
         },
 
         uFadeCenterX: {
-          value: 0.5,
+          value: this.uniformOptions.uFadeCenterX || 0.5,
         },
         uFadeCenterY: {
-          value: 0.5,
+          value: this.uniformOptions.uFadeCenterY || 0.5,
         },
 
         uFadeFrom: {
-          value: 0.075,
+          value: this.uniformOptions.uFadeFrom || 0,
         },
         uFadeTo: {
-          value: 0.75,
+          value: this.uniformOptions.uFadeTo || 1,
         },
 
         uDisplacementCoef: {
-          value: 0.5,
+          value: this.uniformOptions.uDisplacementCoef || 0.1,
         },
 
         uOffsetX: {
-          value: 0,
+          value: this.uniformOptions.uOffsetX || 0,
         },
         uOffsetY: {
-          value: 0,
+          value: this.uniformOptions.uOffsetY || 0,
         },
 
         uTexture: {
