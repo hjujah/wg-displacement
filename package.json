@@ -1,7 +1,7 @@
 {
-  "private": true,
+  "private": false,
   "name": "wg-displacement",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "2D Webgl effect using OGL",
   "author": "Filip Arneric <filip@synchronized.studio>",
   "license": "MIT",
@@ -39,6 +39,16 @@
   "dependencies": {
     "gsap": "^3.11.3",
     "lil-gui": "^0.17.0",
-    "ogl": "^0.0.101"
-  }
+    "ogl": "^0.0.101",
+    "wg-displacement": "^0.0.1"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hjujah/wg-displacement.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hjujah/wg-displacement/issues"
+  },
+  "homepage": "https://github.com/hjujah/wg-displacement#readme"
 }
