@@ -45,7 +45,7 @@ import Scene from '@/js/components/scene'
   new Scene({
     el: '.scene__5',
     image: './img/face3.png',
-    displacement: './img/map23.png',
+    displacement: './img/map22.png',
     GUI: true,
   })
 })()
