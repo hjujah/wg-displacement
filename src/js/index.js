@@ -31,7 +31,7 @@ import Scene from '@/js/components/scene'
   new Scene({
     el: '.scene__3',
     image: './img/face3.png',
-    displacement: './img/map3.png',
+    displacement: './img/map0.png',
     GUI: true,
   })
 

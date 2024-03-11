@@ -25,6 +25,12 @@ uniform float uSpeed;
 // uniform float uDisplacementY;
 
 
+// Helper function to scale UV coordinates
+vec2 scaleUV(vec2 uv, float scale) {
+    float center = 0.0;
+    return ((uv - center) * scale) + ((1.0 - scale) / 2.0);
+}
+
 
 void main() {  
     // Calculate rotation without changing the pivot
@@ -39,12 +45,11 @@ void main() {
     rotatedCoord.y = sinAngle * centeredCoord.x + cosAngle * centeredCoord.y;
     rotatedCoord += 0.5; // Rotate around the original center
 
-
     // Apply the movement to the rotated coordinates
     // vec2 movedCoord = rotatedCoord + vec2(uOffsetX * 0.01, uOffsetY * 0.01);
     
     // Use movedCoord for sampling the displacement texture instead of rotatedCoord
-    vec4 displacementTexture = texture2D(uDisplacementTexture, rotatedCoord);
+    vec4 displacementTexture = texture2D(uDisplacementTexture, scaleUV(rotatedCoord, 0.75));
 
 
 
