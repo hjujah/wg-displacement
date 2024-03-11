@@ -1,0 +1,21 @@
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.lil-gui {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.scene {
+  height: 100%;
+  width: 30%;
+  position: relative;
+  margin: 20px;
+
+  aspect-ratio: 7/9;
+}
