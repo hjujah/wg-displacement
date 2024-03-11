@@ -2,8 +2,6 @@
 import Scene from '@/js/components/scene'
 // import Scene from 'wg-displacement'
 ;(() => {
-  console.log('SENE1', Scene)
-
   // scene
   new Scene({
     el: '.scene__1',
