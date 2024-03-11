@@ -4,7 +4,7 @@ import * as path from 'path'
 
 export default defineConfig({
   root: 'src',
-  base: '/wg-displacement/', // for Github pages, otherwise use './'
+  base: '/', // for Github pages, otherwise use './'
   build: {
     outDir: '../dist',
   },
