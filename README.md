@@ -62,7 +62,11 @@ export default class CustomScene extends React.Component {
 
   render() {
     // Render a container for your scene. Adjust the className as needed.
-    return <div className="scene__1" style={{ width: '100%', height: '100%' }} />
+    return (
+      <div className="scene__1">
+        <canvas></canvas>
+      </div>
+    )
   }
 }
 ```
