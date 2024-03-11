@@ -9,13 +9,13 @@ export default defineConfig({
   base: '/', // for Github pages, otherwise use './'
   build: {
     outDir: '../dist',
-    rollupOptions: {
-      output: {
-        entryFileNames: `assets/[name].js`,
-        chunkFileNames: `assets/[name].js`,
-        assetFileNames: `assets/[name].[ext]`,
-      },
-    },
+    // rollupOptions: {
+    //   output: {
+    //     entryFileNames: `assets/[name].js`,
+    //     chunkFileNames: `assets/[name].js`,
+    //     assetFileNames: `assets/[name].[ext]`,
+    //   },
+    // },
   },
   server: {
     host: true, // to test on other devices with IP address
