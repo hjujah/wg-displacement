@@ -1,9 +1,9 @@
 import GUI from 'lil-gui'
 import { Renderer, Program, Mesh, Triangle } from 'ogl'
-import vertex from '@/js/glsl/main.vert'
-import fragment from '@/js/glsl/main.frag'
-import LoaderManager from '@/js/managers/LoaderManager'
-import { getCoverUV } from '@/js/utils/ogl'
+import vertex from './../glsl/main.vert'
+import fragment from './../glsl/main.frag'
+import LoaderManager from './../managers/LoaderManager'
+import { getCoverUV } from './../utils/ogl'
 import gsap from 'gsap'
 
 const controls = {

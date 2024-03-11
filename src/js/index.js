@@ -1,6 +1,6 @@
 // Test import of a JavaScript module
-// import Scene from '@/js/components/scene'
-import Scene from 'wg-displacement'
+import Scene from '@/js/components/scene'
+// import Scene from 'wg-displacement'
 ;(() => {
   // scene
   new Scene({
