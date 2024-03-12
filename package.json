@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "wg-displacement",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Webgl image displacement",
   "author": "Filip Arneric <filip@synchronized.studio>",
   "main": "./dist/wg-displacement.umd.js",
@@ -17,6 +17,10 @@
     "deploy": "vite build --emptyOutDir && gh-pages -d dist",
     "startrbln": "vite preview --port 3028"
   },
+  "files": [
+    "dist/*",
+    "src/*"
+  ],
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/eslint-parser": "^7.19.1",
@@ -43,7 +47,7 @@
     "gsap": "^3.11.3",
     "lil-gui": "^0.17.0",
     "ogl": "^0.0.101",
-    "wg-displacement": "^0.0.1"
+    "wg-displacement": "^0.3.0"
   },
   "repository": {
     "type": "git",
