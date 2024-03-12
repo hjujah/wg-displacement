@@ -1,8 +1,7 @@
 import { defineConfig } from 'vite'
 import glslify from 'rollup-plugin-glslify'
-// import glsl from 'vite-plugin-glsl'
 
-import * as path from 'path'
+import { resolve } from 'path'
 
 export default defineConfig({
   root: 'src',
@@ -16,13 +15,23 @@ export default defineConfig({
     //     assetFileNames: `assets/[name].[ext]`,
     //   },
     // },
+    // },
+
+    lib: {
+      // Could also be a dictionary or array of multiple entry points
+      entry: resolve(__dirname, '/main.js'),
+      name: 'wg-displacement',
+      // the proper extensions will be added
+      fileName: 'wg-displacement',
+    },
   },
+
   server: {
     host: true, // to test on other devices with IP address
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': resolve(__dirname, './src'),
     },
   },
 
