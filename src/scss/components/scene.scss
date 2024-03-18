@@ -8,8 +8,14 @@ main {
 
 .lil-gui {
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: 0%;
+  left: 100%;
+}
+
+.file-input {
+  position: absolute;
+  left: 100%;
+  bottom: 0;
 }
 
 .scene {

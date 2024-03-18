@@ -21,6 +21,9 @@ uniform float uDisplacementCoef;
 uniform float uSpeed;
 
 
+uniform bool uEffect1;
+
+
 // uniform float uDisplacementX;
 // uniform float uDisplacementY;
 
@@ -52,21 +55,58 @@ void main() {
     vec4 displacementTexture = texture2D(uDisplacementTexture, scaleUV(rotatedCoord, 0.75));
 
 
-
     // Calculate fade effect based on a different center (uFadeCenterX, uFadeCenterY)
-    vec2 fadeEffectCenter = vec2(uFadeCenterX, uFadeCenterY);
+    // vec2 fadeEffectCenter = vec2(uFadeCenterX, uFadeCenterY);
+
+    // bool effect1 = true;
+
+    vec2 fadeEffectCenter;
+
+    if(uEffect1) {
+        fadeEffectCenter = vec2(uFadeCenterX, uFadeCenterY);
+    } else{
+        fadeEffectCenter = vec2(uOffsetX * uFadeCenterX, uOffsetY * uFadeCenterY);
+    }
+
     vec2 displacementMapCoordAdjusted = vUvDisplacementMap - fadeEffectCenter;
     float distanceFromFadeCenter = length(displacementMapCoordAdjusted);
     float edgeFade = smoothstep(uFadeFrom, uFadeTo, distanceFromFadeCenter); // Inverse fade effect
 
-    float displaceForceX = displacementTexture.r * uOffsetX * uDisplacementCoef * edgeFade;
-    float displaceForceY = displacementTexture.r * uOffsetY * uDisplacementCoef * edgeFade;
 
-    vec2 uvDisplaced = vec2(vUvMap.x - displaceForceX, vUvMap.y + displaceForceY);
+    // Calculate direction factors: 
+    // Negative for left and top, positive for right and bottom
+    float directionFactorX = (vUvMap.x - 0.5) * 2.0; // Scale to [-1, 1] range for horizontal control
+    float directionFactorY = (vUvMap.y - 0.5) * 2.0; // Scale to [-1, 1] range for vertical control
 
-    // vec2 movedCoord = uvDisplaced + vec2(uOffsetX * 0.01, uOffsetY * 0.01);
+    // Apply the direction factors to displacement force
+    float displaceForceX;
+    float displaceForceY;
+    if(uEffect1) {
+        displaceForceX = displacementTexture.r * uOffsetX * uDisplacementCoef * edgeFade * -1.0;
+        displaceForceY = displacementTexture.r * uOffsetY * uDisplacementCoef * edgeFade * -1.0;
+    } else {
+        displaceForceX = displacementTexture.r * 0.1 * uDisplacementCoef * directionFactorX * edgeFade * -1.0;
+        displaceForceY = displacementTexture.r * 0.1 * uDisplacementCoef * directionFactorY * edgeFade * -1.0;
+    }
 
+    // Adjust uvDisplaced based on the displacement forces
+    vec2 uvDisplaced = vec2(vUvMap.x + displaceForceX, vUvMap.y + displaceForceY);
+
+    // Apply displaced texture coordinates
     vec4 displacedTexture = texture2D(uTexture, uvDisplaced);
 
-    gl_FragColor = displacedTexture;
+
+
+    // float displaceForceX1 = displacementTexture.r * uOffsetX * uDisplacementCoef * edgeFade * -1.0;
+    // float displaceForceY1 = displacementTexture.r * uOffsetY * uDisplacementCoef * edgeFade * -1.0;
+    // vec2 uvDisplaced1 = vec2(vUvMap.x - displaceForceX1, vUvMap.y + displaceForceY1);
+    // vec4 displacedTexture1 = texture2D(uTexture, uvDisplaced1);
+    
+
+    // float displaceForceX1 = displacementTexture.r * 0.1 * uDisplacementCoef * edgeFade * -1.0;
+    // float displaceForceY1 = displacementTexture.r * 0.1 * uDisplacementCoef * edgeFade * -1.0;
+    // vec2 uvDisplaced1 = vec2(vUvMap.x - displaceForceX1, vUvMap.y + displaceForceY1);
+    // vec4 displacedTexture1 = texture2D(uTexture, uvDisplaced1);
+
+    gl_FragColor =  displacedTexture * 1.;
 }

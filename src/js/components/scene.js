@@ -29,13 +29,33 @@ const controls = {
   },
   displacementCoef: {
     default: 0.5,
-    min: 0,
-    max: 1,
+    min: -5,
+    max: 5,
   },
   speed: {
     default: 0.3,
     min: 0,
     max: 1,
+  },
+  horMinValue: {
+    default: 0.25,
+    min: -4,
+    max: 4,
+  },
+  horMaxValue: {
+    default: 0.75,
+    min: -4,
+    max: 4,
+  },
+  vertMinValue: {
+    default: 0.25,
+    min: -4,
+    max: 4,
+  },
+  vertMaxValue: {
+    default: 0.75,
+    min: -4,
+    max: 4,
   },
 }
 
@@ -53,6 +73,9 @@ class Scene {
   renderer
   mesh
   program
+  el
+  canvasEl
+
   guiObj = {
     fadeFrom: 0.075,
     fadeTo: 0.75,
@@ -60,26 +83,117 @@ class Scene {
     fadeCenterY: 0.5,
     displacementCoef: 0.5,
     speed: 0.3,
+    horMinValue: 0.25,
+    horMaxValue: 0.75,
+    vertMinValue: 0.25,
+    vertMaxValue: 0.75,
   }
 
+  horMinValue = 0.25
+  horMaxValue = 0.75
+  vertMinValue = 0.25
+  vertMaxValue = 0.75
+
   mousePosition = {
-    x: 0,
-    y: 0,
+    x: 0.5,
+    y: 0.5,
   }
 
   constructor(opts = { el: '.scene', GUI: false, uniforms: {} }) {
     this.el = document.querySelector(opts.el)
+    this.canvasEl = this.el.getElementsByTagName('canvas')[0]
+
     this.uid = Math.random().toString(36).substr(2, 9)
     this.imageUrl = opts.image
     this.displacementUrl = opts.displacement
     this.GUI = opts.GUI
     this.uniformOptions = opts.uniforms || {}
 
+    this.horMinValue = opts.sensitivity?.horMinValue || -1
+    this.horMaxValue = opts.sensitivity?.horMaxValue || 1
+    this.vertMinValue = opts.sensitivity?.vertMinValue || -1
+    this.vertMaxValue = opts.sensitivity?.vertMaxValue || 1
+
     this.setGUI()
     this.setScene()
 
+    this.initImageUploader()
+
     setTimeout(() => {
       this.events()
+    })
+  }
+
+  /**
+   * Initializes the image uploader.
+   */
+  initImageUploader() {
+    let self = this
+
+    let imageUpload = this.el.getElementsByTagName('input')[0]
+
+    /**
+     * Event listener for when the file input is changed.
+     * @param {Event} event - The event object.
+     */
+    imageUpload.addEventListener('change', function (event) {
+      let file = event.target.files[0]
+
+      /**
+       * Creates a new FileReader object.
+       */
+      let reader = new FileReader()
+
+      /**
+       * Event listener for when the file is loaded.
+       * @param {Event} event - The event object.
+       */
+      reader.addEventListener('load', function (event) {
+        let img = new Image()
+        img.src = event.target.result
+
+        /**
+         * Event listener for when the image is loaded.
+         */
+        img.addEventListener('load', function () {
+          let canvas = document.createElement('canvas')
+          let ctx = canvas.getContext('2d')
+          canvas.width = img.width
+          canvas.height = img.height
+          ctx.drawImage(img, 0, 0)
+
+          /**
+           * Creates a data URL from the image.
+           */
+          let dataURL = canvas.toDataURL('image/png')
+
+          /**
+           * Creates a new image object.
+           */
+          let image = new Image()
+          image.src = dataURL
+
+          /**
+           * Event listener for when the image is loaded.
+           */
+          image.addEventListener('load', function () {
+            /**
+             * Sets the new displacement URL.
+             */
+            self.displacementUrl = dataURL
+
+            /**
+             * Sets the new scene.
+             */
+            self.setScene()
+          })
+        })
+      })
+
+      /**
+       * Reads the file as a data URL.
+       */
+      reader.readAsDataURL(file)
     })
   }
 
@@ -90,6 +204,13 @@ class Scene {
     if (!this.GUI) return
 
     const gui = new GUI({ container: this.el })
+
+    // add effect switcher
+    gui.add({ effect: this.uniformOptions.uEffect }, 'effect', ['Effect1', 'Effect2']).onChange((val) => {
+      this.program.uniforms.uEffect1.value = val == 'Effect1'
+    })
+
+    const sensitivityFolder = gui.addFolder('Mouse sensitivity')
 
     // loop through the controls object and add the controls to the gui
     for (const key in controls) {
@@ -108,11 +229,41 @@ class Scene {
 
       if (this.uniformOptions[uniform]) {
         this.guiObj[key] = this.uniformOptions[uniform]
-      }
 
-      gui.add(this.guiObj, key, control.min, control.max).onChange((val) => {
-        this.program.uniforms[uniform].value = val
-      })
+        gui.add(this.guiObj, key, control.min, control.max).onChange((val) => {
+          this.program.uniforms[uniform].value = val
+        })
+      } else {
+        this.guiObj[key] = this[key]
+
+        sensitivityFolder.add(this.guiObj, key, control.min, control.max).onChange((val) => {
+          this[key] = val
+        })
+      }
+    }
+  }
+
+  destroyScene() {
+    // Remove event listeners
+    this.el.removeEventListener('mousemove', this.onMouseMove, false)
+    this.el.removeEventListener('mouseleave', this.onLeave, false)
+    window.removeEventListener('resize', this.handleResize, false)
+
+    // Remove ticker from animation loop
+    gsap.ticker.remove(this.handleRAF)
+
+    // Dispose of WebGL resources
+    if (this.program) {
+      this.program.destroy()
+      this.program = null
+    }
+    if (this.mesh) {
+      this.mesh.geometry.dispose()
+      this.mesh = null
+    }
+    if (this.renderer) {
+      this.renderer.dispose()
+      this.renderer = null
     }
   }
 
@@ -120,9 +271,9 @@ class Scene {
    * Sets up the WebGL scene using OGL.
    */
   async setScene() {
-    const canvasEl = this.el.getElementsByTagName('canvas')[0]
+    // this.destroyScene()
 
-    if (!canvasEl) {
+    if (!this.canvasEl) {
       console.warn('No canvas element found in the container. Make sure to add a canvas element to the container!')
       return
     }
@@ -130,7 +281,7 @@ class Scene {
     // Initialize the renderer
     this.renderer = new Renderer({
       dpr: Math.min(window.devicePixelRatio, 2),
-      canvas: canvasEl,
+      canvas: this.canvasEl,
     })
     const gl = this.renderer.gl
     gl.clearColor(1, 1, 1, 1)
@@ -158,7 +309,7 @@ class Scene {
       ],
       gl
     ).then(() => {
-      // console.log('assets loaded:', LoaderManager.assets)
+      console.log('assets loaded:', LoaderManager.assets)
     })
 
     const uvCover = getCoverUV(gl, LoaderManager.assets[imageID].image)
@@ -224,6 +375,10 @@ class Scene {
         uvDisplacementOffset: {
           value: uvDisplacementCover.offset,
         },
+
+        uEffect1: {
+          value: this.uniformOptions.uEffect == 'Effect1',
+        },
       },
     })
 
@@ -260,8 +415,8 @@ class Scene {
      * Adds event listeners for mouse movement and resizing
      * @param {MouseEvent} event - the mouse event object
      */
-    this.el.addEventListener('mousemove', this.onMouseMove, false)
-    this.el.addEventListener('mouseleave', this.onLeave, false)
+    this.canvasEl.addEventListener('mousemove', this.onMouseMove, false)
+    this.canvasEl.addEventListener('mouseleave', this.onLeave, false)
 
     /**
      * Adds a ticker to the animation loop
@@ -318,10 +473,8 @@ class Scene {
     const normalizedY = y / this.el.offsetHeight
 
     // Adjust the range of x and y from 0-1 to minValue-maxValue
-    const minValue = -4
-    const maxValue = 4
-    const adjustedX = this.adjustRange(normalizedX, minValue, maxValue)
-    const adjustedY = this.adjustRange(normalizedY, minValue, maxValue)
+    const adjustedX = this.adjustRange(normalizedX, this.horMinValue, this.horMaxValue)
+    const adjustedY = this.adjustRange(normalizedY, this.vertMinValue, this.vertMaxValue)
 
     // animate the uniforms based on the adjusted mouse position
     gsap.to(this.mousePosition, {
@@ -347,8 +500,8 @@ class Scene {
     }
 
     gsap.to(this.mousePosition, {
-      x: 0,
-      y: 0,
+      x: this.program.uniforms.uEffect1.value ? 0 : 0.5,
+      y: this.program.uniforms.uEffect1.value ? 0 : 0.5,
       duration: 2,
       ease: 'Power4.easeOut',
       overwrite: true,
