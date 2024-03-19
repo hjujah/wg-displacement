@@ -103,10 +103,19 @@ void main() {
     // vec4 displacedTexture1 = texture2D(uTexture, uvDisplaced1);
     
 
-    // float displaceForceX1 = displacementTexture.r * 0.1 * uDisplacementCoef * edgeFade * -1.0;
-    // float displaceForceY1 = displacementTexture.r * 0.1 * uDisplacementCoef * edgeFade * -1.0;
-    // vec2 uvDisplaced1 = vec2(vUvMap.x - displaceForceX1, vUvMap.y + displaceForceY1);
-    // vec4 displacedTexture1 = texture2D(uTexture, uvDisplaced1);
 
-    gl_FragColor =  displacedTexture * 1.;
+    if(uEffect1) {
+        float displaceForceX1 = displacementTexture.r * 0.025 * uDisplacementCoef   * -1.0;
+        float displaceForceY1 = displacementTexture.r * 0.025 * uDisplacementCoef   * -1.0;
+        vec2 uvDisplaced1 = vec2(vUvMap.x - displaceForceX1, vUvMap.y + displaceForceY1);
+        vec4 displacedTexture1 = texture2D(uTexture, uvDisplaced1);
+
+        float displaceForceX2 = displacementTexture.r * 0.025 * uDisplacementCoef   * 1.0;
+        float displaceForceY2 = displacementTexture.r * 0.025 * uDisplacementCoef   * 1.0;
+        vec2 uvDisplaced2 = vec2(vUvMap.x - displaceForceX2, vUvMap.y + displaceForceY2);
+        vec4 displacedTexture2 = texture2D(uTexture, uvDisplaced2);
+        gl_FragColor =  displacedTexture2 * 0.3 + displacedTexture1 * 0.3 + displacedTexture * 0.4;
+    } else {
+        gl_FragColor = displacedTexture;
+    }
 }
