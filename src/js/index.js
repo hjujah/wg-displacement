@@ -25,6 +25,7 @@ import Scene from '@/js/components/scene'
       uDisplacementCoef: 2.2,
       uOffsetX: 0.5,
       uOffsetY: 0.5,
+      uConstantDisplacementCoef: 0,
     },
   })
 
@@ -51,6 +52,7 @@ import Scene from '@/js/components/scene'
       uDisplacementCoef: 0.67,
       uOffsetX: 0.0,
       uOffsetY: 0.0,
+      uConstantDisplacementCoef: 0.9,
     },
   })
 })()

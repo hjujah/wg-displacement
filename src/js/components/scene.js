@@ -32,6 +32,11 @@ const controls = {
     min: -5,
     max: 5,
   },
+  constantDisplacementCoef: {
+    default: 0.5,
+    min: -5,
+    max: 5,
+  },
   speed: {
     default: 0.3,
     min: 0,
@@ -82,6 +87,7 @@ class Scene {
     fadeCenterX: 0.5,
     fadeCenterY: 0.5,
     displacementCoef: 0.5,
+    constantDisplacementCoef: 0.5,
     speed: 0.3,
     horMinValue: 0.25,
     horMaxValue: 0.75,
@@ -227,7 +233,7 @@ class Scene {
 
       const uniform = `u${key.charAt(0).toUpperCase() + key.slice(1)}`
 
-      if (this.uniformOptions[uniform]) {
+      if (typeof this.uniformOptions[uniform] !== 'undefined') {
         this.guiObj[key] = this.uniformOptions[uniform]
 
         gui.add(this.guiObj, key, control.min, control.max).onChange((val) => {
@@ -235,7 +241,6 @@ class Scene {
         })
       } else {
         this.guiObj[key] = this[key]
-
         sensitivityFolder.add(this.guiObj, key, control.min, control.max).onChange((val) => {
           this[key] = val
         })
@@ -347,6 +352,10 @@ class Scene {
 
         uDisplacementCoef: {
           value: this.uniformOptions.uDisplacementCoef || 0.1,
+        },
+
+        uConstantDisplacementCoef: {
+          value: this.uniformOptions.uConstantDisplacementCoef || 0.1,
         },
 
         uOffsetX: {
