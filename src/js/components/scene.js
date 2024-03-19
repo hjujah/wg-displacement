@@ -37,6 +37,13 @@ const controls = {
     min: -5,
     max: 5,
   },
+
+  constantEffectVisible: {
+    default: 0.5,
+    min: 0,
+    max: 1,
+  },
+
   speed: {
     default: 0.3,
     min: 0,
@@ -383,6 +390,10 @@ class Scene {
         },
         uvDisplacementOffset: {
           value: uvDisplacementCover.offset,
+        },
+
+        uConstantEffectVisible: {
+          value: this.uniformOptions.uConstantEffectVisible || 0,
         },
 
         uEffect1: {

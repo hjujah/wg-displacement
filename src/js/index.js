@@ -26,6 +26,7 @@ import Scene from '@/js/components/scene'
       uOffsetX: 0.5,
       uOffsetY: 0.5,
       uConstantDisplacementCoef: 0,
+      uConstantEffectVisible: 0,
     },
   })
 
@@ -53,6 +54,7 @@ import Scene from '@/js/components/scene'
       uOffsetX: 0.0,
       uOffsetY: 0.0,
       uConstantDisplacementCoef: 0.9,
+      uConstantEffectVisible: 0.5,
     },
   })
 })()

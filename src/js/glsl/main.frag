@@ -22,6 +22,8 @@ uniform float uConstantDisplacementCoef;
 
 uniform float uSpeed;
 
+uniform float uConstantEffectVisible;
+
 
 uniform bool uEffect1;
 
@@ -106,18 +108,19 @@ void main() {
     
 
 
-    if(uEffect1) {
-        float displaceForceX1 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * -1.0;
-        float displaceForceY1 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * -1.0;
-        vec2 uvDisplaced1 = vec2(vUvMap.x - displaceForceX1, vUvMap.y + displaceForceY1);
-        vec4 displacedTexture1 = texture2D(uTexture, uvDisplaced1);
 
-        float displaceForceX2 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * 1.0;
-        float displaceForceY2 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * 1.0;
-        vec2 uvDisplaced2 = vec2(vUvMap.x - displaceForceX2, vUvMap.y + displaceForceY2);
-        vec4 displacedTexture2 = texture2D(uTexture, uvDisplaced2);
-        gl_FragColor =  displacedTexture2 * 0.25 + displacedTexture1 * 0.25 + displacedTexture * 0.5;
-    } else {
-        gl_FragColor = displacedTexture;
-    }
+    float displaceForceX1 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * -1.0;
+    float displaceForceY1 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * -1.0;
+    vec2 uvDisplaced1 = vec2(vUvMap.x - displaceForceX1, vUvMap.y + displaceForceY1);
+    vec4 displacedTexture1 = texture2D(uTexture, uvDisplaced1);
+
+    float displaceForceX2 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * 1.0;
+    float displaceForceY2 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * 1.0;
+    vec2 uvDisplaced2 = vec2(vUvMap.x - displaceForceX2, vUvMap.y + displaceForceY2);
+    vec4 displacedTexture2 = texture2D(uTexture, uvDisplaced2);
+    
+    float f = 1.0 - uConstantEffectVisible;
+    float a = (1.0 - f) / 2.0;
+    gl_FragColor =  displacedTexture2 * a + displacedTexture1 * a + displacedTexture * f;
+
 }
