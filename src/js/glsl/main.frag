@@ -99,7 +99,7 @@ void main() {
     // Apply displaced texture coordinates
     vec4 displacedTexture = texture2D(uTexture, uvDisplaced);
 
-
+    
 
     // float displaceForceX1 = displacementTexture.r * uOffsetX * uDisplacementCoef * edgeFade * -1.0;
     // float displaceForceY1 = displacementTexture.r * uOffsetY * uDisplacementCoef * edgeFade * -1.0;
@@ -109,18 +109,42 @@ void main() {
 
 
 
-    float displaceForceX1 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * -1.0;
-    float displaceForceY1 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * -1.0;
-    vec2 uvDisplaced1 = vec2(vUvMap.x - displaceForceX1, vUvMap.y + displaceForceY1);
-    vec4 displacedTexture1 = texture2D(uTexture, uvDisplaced1);
+    // float displaceForceX1 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * -1.0;
+    // float displaceForceY1 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * -1.0;
+    // vec2 uvDisplaced1 = vec2(vUvMap.x - displaceForceX1, vUvMap.y + displaceForceY1);
+    // vec4 displacedTexture1 = texture2D(uTexture, uvDisplaced1);
 
-    float displaceForceX2 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * 1.0;
-    float displaceForceY2 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * 1.0;
-    vec2 uvDisplaced2 = vec2(vUvMap.x - displaceForceX2, vUvMap.y + displaceForceY2);
-    vec4 displacedTexture2 = texture2D(uTexture, uvDisplaced2);
-    
+    // float displaceForceX2 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * 1.0;
+    // float displaceForceY2 = displacementTexture.r * 0.025 * uConstantDisplacementCoef  * 1.0;
+    // vec2 uvDisplaced2 = vec2(vUvMap.x - displaceForceX2, vUvMap.y + displaceForceY2);
+    // vec4 displacedTexture2 = texture2D(uTexture, uvDisplaced2);
+
+
+    vec2 center = vec2(0.5, 0.5); // Center of the UV coordinate space
+    vec2 toCenter = vUvMap - center; // Direction vector from current UV to the center
+
+    // Calculate radial distance from the center
+    float distanceFromCenter = length(toCenter);
+
+    // Use the red channel of the displacement texture to determine displacement magnitude
+    // Multiplying by `toCenter` ensures displacement is directional and radial
+    float displacementMagnitude = displacementTexture.r * 0.025 * uConstantDisplacementCoef;
+
+    // Adjust displacement by distance from center if needed
+    // Here we apply the displacement magnitude to our direction vector 'toCenter'
+    // This makes the displacement radial
+    vec2 displacement = toCenter * displacementMagnitude * distanceFromCenter;
+
+    // Apply the displacement to the UV coordinates
+    vec2 uvDisplacedConstant = vUvMap + displacement;
+
+    // Sample the texture with the displaced UV coordinates
+    vec4 constantDisplacedTexture = texture2D(uTexture, uvDisplacedConstant);
+        
     float f = 1.0 - uConstantEffectVisible;
-    float a = (1.0 - f) / 2.0;
-    gl_FragColor =  displacedTexture2 * a + displacedTexture1 * a + displacedTexture * f;
+    float a = (1.0 - f);
+
+
+    gl_FragColor =  constantDisplacedTexture * a + displacedTexture * f;
 
 }

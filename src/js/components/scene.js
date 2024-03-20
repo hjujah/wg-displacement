@@ -33,9 +33,9 @@ const controls = {
     max: 5,
   },
   constantDisplacementCoef: {
-    default: 0.5,
-    min: -5,
-    max: 5,
+    default: 0,
+    min: -50,
+    max: 50,
   },
 
   constantEffectVisible: {
