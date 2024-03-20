@@ -37,24 +37,24 @@ import Scene from '@/js/components/scene'
     GUI: true,
 
     sensitivity: {
-      horMinValue: -2,
-      horMaxValue: 2,
-      vertMinValue: -2,
-      vertMaxValue: 2,
+      horMinValue: -1,
+      horMaxValue: 1,
+      vertMinValue: -1,
+      vertMaxValue: 1,
     },
 
     uniforms: {
       uEffect: 'Effect1',
-      uSpeed: 0.03,
+      uSpeed: 0.15,
       uFadeCenterX: 0.5,
       uFadeCenterY: 0.5,
       uFadeFrom: 0.075,
       uFadeTo: 0.55,
-      uDisplacementCoef: 0.67,
+      uDisplacementCoef: 0.3,
       uOffsetX: 0.0,
       uOffsetY: 0.0,
-      uConstantDisplacementCoef: 0.9,
-      uConstantEffectVisible: 0.5,
+      uConstantDisplacementCoef: -45,
+      uConstantEffectVisible: 0.625,
     },
   })
 
@@ -149,9 +149,9 @@ import Scene from '@/js/components/scene'
     GUI: true,
 
     sensitivity: {
-      horMinValue: 1.808,
+      horMinValue: 0.25,
       horMaxValue: 0.75,
-      vertMinValue: -1,
+      vertMinValue: 0.25,
       vertMaxValue: 0.75,
     },
 
@@ -159,14 +159,14 @@ import Scene from '@/js/components/scene'
       uEffect: 'Effect2',
       uSpeed: 0.03,
       uFadeCenterX: 1,
-      uFadeCenterY: 0.631,
-      uFadeFrom: 1,
-      uFadeTo: 0.01,
-      uDisplacementCoef: -5,
+      uFadeCenterY: 1,
+      uFadeFrom: 0.879,
+      uFadeTo: 0.252,
+      uDisplacementCoef: 2.2,
       uOffsetX: 0.5,
       uOffsetY: 0.5,
-      uConstantDisplacementCoef: -1.22,
-      uConstantEffectVisible: 0.474,
+      uConstantDisplacementCoef: 0,
+      uConstantEffectVisible: 0,
     },
   })
 })()

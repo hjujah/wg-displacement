@@ -485,8 +485,9 @@ class Scene {
       return
     }
 
-    const x = event.clientX - this.el.offsetLeft
-    const y = event.clientY - this.el.offsetTop
+    // Calculate the mouse position relative to the document
+    const x = event.clientX - this.el.getBoundingClientRect().left
+    const y = event.clientY - this.el.getBoundingClientRect().top
 
     // normalize value to 0-1
     const normalizedX = x / this.el.offsetWidth
